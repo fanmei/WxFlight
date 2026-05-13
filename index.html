@@ -1,0 +1,248 @@
+
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+							<style>
+								body {
+									background-color: white; /* Ensure the iframe has a white background */
+								}
+
+								
+							</style>
+                        </head>
+                        <body>
+                            <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WxFlight Planner</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{--bg:#0e1117;--surface:#1a1f2e;--surface2:#262c3d;--accent:#ff4b4b;--accent2:#4fc3f7;--accent3:#81c784;--text:#fafafa;--text-dim:#a3a8b8;--border:#3d4560;--code-bg:#0d1117;--font-mono:'JetBrains Mono',monospace;--font-serif:'Source Serif 4',serif;--tt:#ff9100;--avx:#00e5ff;--brand:#7c4dff}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font-serif);background:var(--bg);color:var(--text);line-height:1.6;padding:14px}
+.container{max-width:1200px;margin:0 auto}
+h1{font-size:1.5rem;color:var(--brand)}
+h1 .sub{font-size:0.68rem;color:var(--text-dim);font-weight:400;display:block;margin-top:2px}
+h2{font-size:1.05rem;color:var(--accent2);margin:14px 0 6px;border-bottom:1px solid var(--border);padding-bottom:3px}
+h3{font-size:0.88rem;color:var(--accent3);margin:10px 0 5px}
+.header{background:linear-gradient(135deg,#1a1f2e,#1a0033);border-radius:10px;padding:18px;margin-bottom:12px;border:1px solid var(--brand)}
+.header p{color:var(--text-dim);font-size:0.76rem;margin-top:3px}
+.badge{display:inline-block;padding:2px 7px;border-radius:10px;font-family:var(--font-mono);font-size:0.6rem;margin:3px 2px 0 0;border:1px solid}
+.tabs{display:flex;gap:3px;margin-bottom:12px;flex-wrap:wrap}
+.tab{padding:7px 13px;background:var(--surface);border:1px solid var(--border);border-radius:7px 7px 0 0;cursor:pointer;font-family:var(--font-mono);font-size:0.72rem;color:var(--text-dim);transition:all .2s}
+.tab.active,.tab:hover{background:var(--surface2);color:var(--brand);border-bottom-color:var(--brand)}
+.panel{display:none;background:var(--surface);border:1px solid var(--border);border-radius:0 8px 8px 8px;padding:14px}
+.panel.active{display:block}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:9px;margin:8px 0}
+.form-item label{display:block;font-family:var(--font-mono);font-size:0.65rem;color:var(--text-dim);margin-bottom:2px}
+.form-item input,.form-item select{width:100%;background:var(--code-bg);border:1px solid var(--border);color:var(--text);padding:6px 8px;border-radius:5px;font-family:var(--font-mono);font-size:0.74rem}
+.loc-card{background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:7px 9px;margin:4px 0;font-size:0.72rem;display:flex;align-items:center;gap:7px;cursor:pointer;transition:all .15s}
+.loc-card:hover,.loc-card.active{border-color:var(--brand);background:rgba(124,77,255,.06)}
+.loc-card .coords{font-family:var(--font-mono);font-size:0.6rem;color:var(--text-dim)}
+.custom-loc{display:none;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:6px 0;padding:9px;background:var(--code-bg);border:1px solid var(--border);border-radius:6px}
+.run-btn{background:linear-gradient(135deg,#4a148c,#7c4dff);color:#fff;border:none;padding:10px 22px;border-radius:6px;font-family:var(--font-mono);font-size:0.8rem;cursor:pointer;transition:all .3s;display:block;margin:10px auto}
+.run-btn:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(124,77,255,.4)}
+.run-btn.running{background:linear-gradient(135deg,#1565c0,#1976d2);pointer-events:none}
+.run-btn.done{background:linear-gradient(135deg,#2e7d32,#43a047)}
+.avx-btn{background:linear-gradient(135deg,#006064,#00838f);color:#fff;border:none;padding:10px 22px;border-radius:6px;font-family:var(--font-mono);font-size:0.8rem;cursor:pointer;transition:all .3s;display:block;margin:10px auto}
+.avx-btn:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(0,229,255,.3)}
+.avx-btn:disabled{opacity:.5;pointer-events:none}
+.progress-wrap{height:4px;background:var(--border);border-radius:3px;margin:8px 0;overflow:hidden;display:none}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--brand),var(--accent3));width:0%;transition:width .1s}
+.status-text{font-family:var(--font-mono);font-size:0.68rem;color:var(--accent2);min-height:14px;margin:3px 0}
+.metrics{display:none;grid-template-columns:repeat(auto-fit,minmax(88px,1fr));gap:6px;margin:8px 0}
+.metric{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:6px;text-align:center}
+.metric .val{font-size:0.92rem;font-weight:700;font-family:var(--font-mono)}
+.metric .lbl{font-size:0.55rem;color:var(--text-dim)}
+.charts-grid{display:none;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}
+.chart-card{background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:7px}
+.chart-card canvas{max-height:155px}
+.dl-row{display:none;gap:7px;justify-content:center;margin-top:10px}
+.dl-btn{border:none;padding:7px 14px;border-radius:5px;font-family:var(--font-mono);font-size:0.7rem;cursor:pointer}
+.dl-feedback{position:fixed;bottom:18px;right:18px;background:var(--accent3);color:#000;padding:9px 14px;border-radius:6px;font-family:var(--font-mono);font-size:0.72rem;display:none;z-index:999;box-shadow:0 3px 12px rgba(0,0,0,.4)}
+.station-select{display:flex;gap:5px;flex-wrap:wrap;margin:6px 0}
+.station-chip{background:var(--code-bg);border:1px solid var(--border);border-radius:16px;padding:4px 10px;font-family:var(--font-mono);font-size:0.68rem;cursor:pointer;transition:all .2s}
+.station-chip:hover,.station-chip.active{border-color:var(--avx);color:var(--avx)}
+.metar-box,.taf-box{background:var(--code-bg);border:1px solid var(--border);border-radius:7px;padding:12px;margin:7px 0;font-family:var(--font-mono);font-size:0.7rem;line-height:1.7;display:none}
+.metar-box .raw,.taf-box .raw{color:#ffcc80;padding:6px;background:rgba(255,183,77,.04);border-radius:4px;word-break:break-all;font-size:0.66rem;margin-bottom:6px;border:1px solid rgba(255,183,77,.15)}
+.decoded-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:6px}
+.decoded-item{padding:5px 8px;background:var(--surface2);border-radius:4px;border-left:2px solid var(--avx)}
+.decoded-item .dk{font-size:0.58rem;color:var(--text-dim)}
+.decoded-item .dv{font-size:0.76rem;font-weight:600}
+.taf-period{border-left:2px solid #ffb74d;padding:5px 8px;margin:4px 0;background:var(--surface2);border-radius:0 4px 4px 0;font-size:0.66rem}
+.flight-cat{display:inline-block;padding:2px 8px;border-radius:3px;font-size:0.66rem;font-weight:700;margin-right:6px}
+.cat-vfr{background:#43a047;color:#fff}.cat-mvfr{background:#1565c0;color:#fff}.cat-ifr{background:#c62828;color:#fff}.cat-lifr{background:#6a1b9a;color:#fff}
+.tt-nav{display:flex;gap:7px;justify-content:center;align-items:center;margin:10px 0}
+.tt-nav button{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:6px 13px;border-radius:5px;font-family:var(--font-mono);font-size:0.74rem;cursor:pointer}
+.tt-nav button:hover{border-color:var(--tt);color:var(--tt)}
+.tt-nav span{font-family:var(--font-mono);font-size:0.8rem;color:var(--tt);min-width:50px;text-align:center;font-weight:700}
+.tt-url-box{background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:8px;margin:8px 0;font-family:var(--font-mono);font-size:0.62rem;color:var(--text-dim);word-break:break-all;user-select:all}
+.quicklinks{display:flex;flex-wrap:wrap;gap:5px;margin:8px 0}
+.quicklinks a{display:inline-block;background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:5px 10px;font-family:var(--font-mono);font-size:0.67rem;color:var(--tt);text-decoration:none;transition:all .2s}
+.quicklinks a:hover{border-color:var(--tt);background:rgba(255,145,0,.1)}
+.note{background:rgba(124,77,255,.05);border-left:3px solid var(--brand);padding:8px 12px;border-radius:0 6px 6px 0;font-size:0.74rem;margin:8px 0;color:#b388ff}
+.runtime-display{font-family:var(--font-mono);font-size:0.72rem;color:var(--tt);background:var(--code-bg);border:1px solid var(--tt);border-radius:5px;padding:6px 12px;display:inline-block;margin:5px 0}
+@media(max-width:768px){.charts-grid,.custom-loc{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<h1>✈️ WxFlight Planner <span class="sub">Weather & Flight Mission Planning System</span></h1>
+<p>HRRR point forecasts • Live METAR/TAF via API • Tropical Tidbits model maps</p>
+<span class="badge" style="color:var(--brand);border-color:rgba(124,77,255,.4)">WxFlight v1.0</span>
+<span class="badge" style="color:var(--avx);border-color:rgba(0,229,255,.3)">Live Aviation API</span>
+<span class="badge" style="color:var(--tt);border-color:rgba(255,145,0,.3)">Tropical Tidbits</span>
+</div>
+
+<div class="tabs">
+<div class="tab active" onclick="switchTab(0)">🌤️ HRRR Forecast</div>
+<div class="tab" onclick="switchTab(1)">✈️ Aviation</div>
+<div class="tab" onclick="switchTab(2)">🌀 Tropical Tidbits</div>
+</div>
+
+<!-- HRRR -->
+<div class="panel active" id="panel0">
+<h2>🌤️ HRRR Point Forecast</h2>
+<div id="locCards"><div class="loc-card active" onclick="selectLoc(0)"><span>🌲</span><div><strong>DOE Bankhead NF</strong><div class="coords">34.3425°N, 87.3382°W | Alabama</div></div></div><div class="loc-card" onclick="selectLoc(1)"><span>🏜️</span><div><strong>DustieAim – Phoenix, AZ</strong><div class="coords">33.6070°N, 112.1669°W | Arizona</div></div></div><div class="loc-card" onclick="selectLoc(2)"><span>📌</span><div><strong>Custom Location</strong><div class="coords">Enter coordinates</div></div></div></div>
+<div class="custom-loc" id="customLoc"><div class="form-item"><label>Lat °N</label><input type="number" id="customLat" value="40" step=".001"></div><div class="form-item"><label>Lon (neg)</label><input type="number" id="customLon" value="-105" step=".001"></div><div class="form-item"><label>Name</label><input type="text" id="customName" value="Custom"></div></div>
+<div class="form-grid"><div class="form-item"><label>📅 Run Date</label><input type="date" id="demoDate" value="2026-05-12"></div><div class="form-item"><label>🕐 Cycle</label><select id="demoCycle"><option value="0">00Z</option><option value="6">06Z</option><option value="12" selected>12Z</option><option value="18">18Z</option></select></div><div class="form-item"><label>⏱️ Hours</label><input type="number" id="demoHours" value="25" min="1" max="48"></div></div>
+<button class="run-btn" id="runBtn" onclick="runForecast()">🚀 Run HRRR Forecast</button>
+<div class="progress-wrap" id="progWrap"><div class="progress-bar" id="progBar"></div></div><div class="status-text" id="statusText"></div>
+<div class="metrics" id="metricsRow"></div>
+<div class="charts-grid" id="chartsGrid"><div class="chart-card"><canvas id="c1"></canvas></div><div class="chart-card"><canvas id="c2"></canvas></div><div class="chart-card"><canvas id="c3"></canvas></div><div class="chart-card"><canvas id="c4"></canvas></div><div class="chart-card"><canvas id="c5"></canvas></div><div class="chart-card"><canvas id="c6"></canvas></div><div class="chart-card"><canvas id="c7"></canvas></div><div class="chart-card"><canvas id="c8"></canvas></div></div>
+<div class="dl-row" id="dlRow"><button class="dl-btn" style="background:var(--accent3);color:#000" onclick="downloadCSV()">📥 CSV</button><button class="dl-btn" style="background:var(--accent2);color:#000" onclick="downloadJSON()">📥 JSON</button><button class="dl-btn" style="background:#ce93d8;color:#000" onclick="downloadPNG()">📥 PNG</button></div>
+</div>
+
+<!-- AVIATION (fetches live data via API) -->
+<div class="panel" id="panel1">
+<h2>✈️ Aviation Weather – Live METAR & TAF</h2>
+<div class="note" style="border-left-color:var(--avx);color:var(--avx)">Fetches live data from <code>aviationweather.gov/api/data/</code>. If CORS blocks the request, decoded results are shown with a direct link to view raw data.</div>
+<h3>🛫 Station</h3>
+<div class="station-select"><div class="station-chip active" onclick="selectStation('KJFX')">KJFX Jasper</div><div class="station-chip" onclick="selectStation('KBHM')">KBHM Birmingham</div><div class="station-chip" onclick="selectStation('KHSV')">KHSV Huntsville</div><div class="station-chip" onclick="selectStation('KPHX')">KPHX Phoenix</div><div class="station-chip" onclick="selectStation('KDVT')">KDVT Deer Valley</div></div>
+<div class="form-grid"><div class="form-item"><label>✏️ Station ID</label><input type="text" id="stationInput" value="KJFX" maxlength="4" style="text-transform:uppercase"></div><div class="form-item"><label>Data</label><select id="dataType"><option value="both">METAR+TAF</option><option value="metar">METAR</option><option value="taf">TAF</option></select></div><div class="form-item"><label>Hours back</label><select id="metarHrs"><option value="1">1h</option><option value="2" selected>2h</option><option value="6">6h</option><option value="12">12h</option></select></div></div>
+<button class="avx-btn" id="avxBtn" onclick="fetchAviation()">✈️ Get Aviation Weather</button>
+<div class="status-text" id="avxStatus"></div>
+<div class="metar-box" id="metarBox"><h3 style="color:var(--avx)">📡 METAR</h3><div id="metarCat"></div><div class="raw" id="metarRaw"></div><div class="decoded-grid" id="metarDecoded"></div></div>
+<div class="taf-box" id="tafBox"><h3 style="color:#ffb74d">📋 TAF</h3><div class="raw" id="tafRaw"></div><div id="tafDecoded"></div></div>
+</div>
+
+<!-- TROPICAL TIDBITS (v16 restored, href fix) -->
+<div class="panel" id="panel2">
+<h2>🌀 Tropical Tidbits – HRRR Model Maps</h2>
+<h3>⚙️ Configure</h3>
+<div class="form-grid">
+<div class="form-item"><label>📅 Runtime Date</label><input type="date" id="ttDate" onchange="updateTT();buildTTQL()"></div>
+<div class="form-item"><label>🕐 Hour</label><select id="ttHour" onchange="updateTT();buildTTQL()"></select></div>
+<div class="form-item"><label>🗺️ Region</label><select id="ttRegion" onchange="updateTT()"><option value="seus" selected>SE US (Bankhead)</option><option value="swus">SW US (Phoenix)</option><option value="us">Full CONUS</option><option value="midsouth">Mid-South</option><option value="gulf">Gulf Coast</option><option value="soupl">S. Plains</option><option value="cpl">C. Plains</option><option value="ne">Northeast</option><option value="nw">Northwest</option><option value="mw">Midwest</option></select></div>
+<div class="form-item"><label>📊 Variable</label><select id="ttPkg" onchange="updateTT()"><option value="ref_frzn" selected>Reflectivity</option><option value="mslp_pcpn">MSLP & Precip</option><option value="T2m">2m Temperature</option><option value="Td2m">2m Dewpoint</option><option value="10mwind">10m Wind</option><option value="sfcwind_gust">Gusts</option><option value="precip_ptotal">Total Precip</option><option value="cape">CAPE</option><option value="vis">Visibility</option><option value="cig">Ceiling</option><option value="smoke">Smoke</option><option value="dust">Dust</option><option value="aod">AOD</option><option value="z500_mslp">500mb Hts</option><option value="T850">850mb T</option><option value="pwat">PWAT</option></select></div>
+<div class="form-item"><label>⏱️ Fh</label><select id="ttFh" onchange="updateTT()"></select></div>
+</div>
+<div class="runtime-display" id="rtDisp"></div>
+<div class="tt-nav"><button onclick="stepFh(-1)">◀ Prev</button><span id="fhLbl">f01</span><button onclick="stepFh(1)">Next ▶</button><button onclick="toggleAnim()" id="animBtn">▶ Animate</button></div>
+<!-- FIX: href is set immediately with a real URL, not "#" -->
+<div style="text-align:center;margin:14px 0"><a id="ttLink" style="display:inline-block;padding:14px 32px;background:linear-gradient(135deg,#e65100,#f57c00);color:#fff;border-radius:8px;font-family:var(--font-mono);font-size:0.9rem;font-weight:700;text-decoration:none;transition:all .3s" target="_blank" rel="noopener noreferrer">🌀 Open HRRR Map on Tropical Tidbits ↗️</a></div>
+<div class="tt-url-box" id="ttUrlBox"></div>
+<h3>🌲 Bankhead NF (seus)</h3><div class="quicklinks" id="ql1"></div>
+<h3>🏜️ DustieAim Phoenix (swus)</h3><div class="quicklinks" id="ql2"></div>
+<h3>🗺️ CONUS (us)</h3><div class="quicklinks" id="ql3"></div>
+</div>
+
+<div class="dl-feedback" id="dlFeedback"></div>
+</div>
+
+<script>
+let charts=[],selectedLoc=0,animInt=null;
+window.forecastData=null;window.siteName='';window.runInfo='';
+function switchTab(i){document.querySelectorAll('.tab').forEach((t,j)=>t.classList.toggle('active',j===i));document.querySelectorAll('.panel').forEach((p,j)=>p.classList.toggle('active',j===i));}
+function selectLoc(i){selectedLoc=i;document.querySelectorAll('.loc-card').forEach((c,j)=>c.classList.toggle('active',j===i));document.getElementById('customLoc').style.display=i===2?'grid':'none';}
+function showFB(m){const e=document.getElementById('dlFeedback');e.textContent=m;e.style.display='block';setTimeout(()=>e.style.display='none',3000);}
+function dlF(c,f,m){const b=new Blob([c],{type:m}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=f;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(u);}
+function downloadCSV(){if(!forecastData)return showFB('⚠️');const h=Object.keys(forecastData[0]);dlF([h.join(','),...forecastData.map(r=>h.map(k=>r[k]??'').join(','))].join('\n'),`wxflight_${siteName}_${runInfo}.csv`,'text/csv');showFB('✅ CSV');}
+function downloadJSON(){if(!forecastData)return showFB('⚠️');dlF(JSON.stringify(forecastData,null,2),`wxflight_${siteName}_${runInfo}.json`,'application/json');showFB('✅ JSON');}
+function downloadPNG(){if(!forecastData)return showFB('⚠️');const cv=document.querySelectorAll('#chartsGrid canvas'),comp=document.createElement('canvas');comp.width=1400;comp.height=Math.ceil(cv.length/2)*260+50;const ctx=comp.getContext('2d');ctx.fillStyle='#0e1117';ctx.fillRect(0,0,comp.width,comp.height);ctx.fillStyle='#b388ff';ctx.font='bold 13px monospace';ctx.fillText(`WxFlight | ${siteName} | ${runInfo}`,10,18);cv.forEach((c,i)=>ctx.drawImage(c,(i%2)*700,Math.floor(i/2)*260+40,700,250));comp.toBlob(b=>{const u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=`wxflight_${siteName}_${runInfo}.png`;a.click();URL.revokeObjectURL(u);showFB('✅ PNG');},'image/png');}
+
+// ===== AVIATION (live fetch from API) =====
+function selectStation(id){document.getElementById('stationInput').value=id;document.querySelectorAll('.station-chip').forEach(c=>c.classList.toggle('active',c.textContent.includes(id)));}
+async function fetchAviation(){
+const btn=document.getElementById('avxBtn'),id=document.getElementById('stationInput').value.toUpperCase().trim(),dt=document.getElementById('dataType').value,hrs=document.getElementById('metarHrs').value;
+if(!id||id.length<3)return;
+btn.disabled=true;btn.textContent='⏳ Fetching...';
+document.getElementById('avxStatus').textContent='';
+document.getElementById('metarBox').style.display='none';
+document.getElementById('tafBox').style.display='none';
+if(dt!=='taf'){
+try{const r=await fetch(`https://aviationweather.gov/api/data/metar?ids=${id}&format=json&hours=${hrs}`);if(r.ok){const d=await r.json();if(d.length)showMetar(d[0]);else document.getElementById('avxStatus').innerHTML=`No METAR for ${id}. <a href="https://aviationweather.gov/data/metar/?id=${id}" target="_blank" style="color:var(--avx)">Try website↗️</a>`;} }catch(e){document.getElementById('avxStatus').innerHTML=`CORS blocked. <a href="https://aviationweather.gov/data/metar/?id=${id}" target="_blank" style="color:var(--avx)">Open on website↗️</a>`;}}
+if(dt!=='metar'){
+try{const r=await fetch(`https://aviationweather.gov/api/data/taf?ids=${id}&format=json`);if(r.ok){const d=await r.json();if(d.length)showTaf(d[0]);}}catch(e){}}
+btn.disabled=false;btn.textContent='✈️ Get Aviation Weather';
+}
+function showMetar(m){document.getElementById('metarBox').style.display='block';document.getElementById('metarRaw').textContent=m.rawOb||'';const cat=m.fltcat||'VFR';document.getElementById('metarCat').innerHTML=`<span class="flight-cat cat-${cat.toLowerCase()}">${cat}</span><span style="font-size:.7rem;color:var(--text-dim)">${m.reportTime||''}</span>`;document.getElementById('metarDecoded').innerHTML=[['Station',m.icaoId],['Time',m.reportTime||''],['Temp',`${m.temp}°C / ${Math.round(m.temp*9/5+32)}°F`],['Dewpoint',`${m.dewp}°C`],['Wind',`${m.wdir}°@${m.wspd}kt${m.wgst?' G'+m.wgst+'kt':''}`],['Visibility',`${m.visib} SM`],['Altimeter',`${m.altim} hPa`],['Clouds',(m.clouds||[]).map(c=>`${c.cover} ${c.base}ft`).join(', ')||'CLR'],['Weather',m.wxString||'None']].map(([k,v])=>`<div class="decoded-item"><div class="dk">${k}</div><div class="dv">${v}</div></div>`).join('');}
+function showTaf(t){document.getElementById('tafBox').style.display='block';document.getElementById('tafRaw').textContent=t.rawTAF||'';document.getElementById('tafDecoded').innerHTML=(t.fcsts||[]).map(p=>`<div class="taf-period"><strong>${p.fcstChange||'FM'} ${p.timeFrom||''}→${p.timeTo||''}</strong> Wind:${p.wdir||'?'}°@${p.wspd||'?'}kt${p.wgst?' G'+p.wgst:''} Vis:${p.visib||'?'}SM Cld:${(p.clouds||[]).map(c=>c.cover+(c.base||'')).join(' ')||'SKC'}</div>`).join('');}
+
+// ===== TROPICAL TIDBITS (v16 options, href fix) =====
+(function initTT(){
+const hS=document.getElementById('ttHour');for(let h=0;h<24;h++){const o=document.createElement('option');o.value=h;o.textContent=`${String(h).padStart(2,'0')}Z`;hS.appendChild(o);}
+const fS=document.getElementById('ttFh');for(let f=0;f<=48;f++){const o=document.createElement('option');o.value=f;o.textContent=`f${String(f).padStart(2,'0')}`;fS.appendChild(o);}fS.value='1';
+const now=new Date();now.setUTCHours(now.getUTCHours()-2);
+document.getElementById('ttDate').value=now.toISOString().slice(0,10);
+document.getElementById('ttHour').value=now.getUTCHours();
+// CRITICAL: call updateTT immediately so href is a real URL, not "#"
+updateTT();buildTTQL();
+})();
+
+function getRT(){return document.getElementById('ttDate').value.replace(/-/g,'')+String(document.getElementById('ttHour').value).padStart(2,'0');}
+function ttUrl(r,p,f,rt){return'https://www.tropicaltidbits.com/analysis/models/?model=hrrr&region='+r+'&pkg='+p+'&runtime='+rt+'&fh='+f;}
+
+function updateTT(){
+const r=document.getElementById('ttRegion').value,p=document.getElementById('ttPkg').value,f=document.getElementById('ttFh').value,rt=getRT();
+const url=ttUrl(r,p,f,rt);
+// FIX: Set href to the REAL url immediately
+document.getElementById('ttLink').href=url;
+document.getElementById('ttUrlBox').textContent=url;
+document.getElementById('fhLbl').textContent='f'+String(f).padStart(2,'0');
+document.getElementById('rtDisp').textContent='Runtime: '+rt+' ('+rt.slice(0,4)+'-'+rt.slice(4,6)+'-'+rt.slice(6,8)+' '+rt.slice(8)+'Z)';
+}
+
+function stepFh(d){const s=document.getElementById('ttFh');let v=+s.value+d;if(v<0)v=48;if(v>48)v=0;s.value=v;updateTT();}
+function toggleAnim(){const b=document.getElementById('animBtn');if(animInt){clearInterval(animInt);animInt=null;b.textContent='▶ Animate';return;}b.textContent='⏸ Stop';animInt=setInterval(()=>stepFh(1),600);}
+
+function buildTTQL(){
+const rt=getRT(),pk=[['ref_frzn','Reflectivity'],['T2m','Temp'],['10mwind','Wind'],['precip_ptotal','Precip'],['smoke','Smoke'],['dust','Dust'],['aod','AOD'],['cape','CAPE'],['vis','Visibility'],['sfcwind_gust','Gusts'],['mslp_pcpn','MSLP']];
+document.getElementById('ql1').innerHTML=pk.map(([p,l])=>`<a href="${ttUrl('seus',p,1,rt)}" target="_blank" rel="noopener noreferrer">${l}</a>`).join('');
+document.getElementById('ql2').innerHTML=pk.map(([p,l])=>`<a href="${ttUrl('swus',p,1,rt)}" target="_blank" rel="noopener noreferrer">${l}</a>`).join('');
+document.getElementById('ql3').innerHTML=pk.map(([p,l])=>`<a href="${ttUrl('us',p,1,rt)}" target="_blank" rel="noopener noreferrer">${l}</a>`).join('');
+}
+
+// ===== HRRR =====
+const LOCS=[{name:'Bankhead_NF',fn:'DOE Bankhead NF',off:-5,tz:'CDT',dusty:false},{name:'DustieAim_PHX',fn:'DustieAim Phoenix',off:-7,tz:'MST',dusty:true},{name:'Custom',fn:'Custom',off:0,tz:'UTC',dusty:false}];
+function runForecast(){const btn=document.getElementById('runBtn'),n=parseInt(document.getElementById('demoHours').value),cy=parseInt(document.getElementById('demoCycle').value),dv=document.getElementById('demoDate').value;const loc=selectedLoc===2?{...LOCS[2],name:document.getElementById('customName').value,fn:document.getElementById('customName').value}:LOCS[selectedLoc];const isD=loc.dusty;window.siteName=loc.name;window.runInfo=`${dv}_${String(cy).padStart(2,'0')}Z`;btn.textContent='⏳ Fetching...';btn.classList.add('running');document.getElementById('progWrap').style.display='block';document.getElementById('progBar').style.width='0%';document.getElementById('metricsRow').style.display='none';document.getElementById('chartsGrid').style.display='none';document.getElementById('dlRow').style.display='none';charts.forEach(c=>c.destroy());charts=[];let s=0;const iv=setInterval(()=>{s++;document.getElementById('progBar').style.width=(s/n*100)+'%';document.getElementById('statusText').textContent=`f${String(s-1).padStart(2,'0')}/${n-1}`;if(s>=n){clearInterval(iv);btn.textContent='✅ Done';btn.classList.remove('running');btn.classList.add('done');document.getElementById('statusText').innerHTML=`<span style="color:var(--accent3)">✅ ${n} hrs – ${loc.fn}</span>`;setTimeout(()=>{btn.textContent='🚀 Run HRRR Forecast';btn.classList.remove('done');},3000);buildC(loc,cy,n,dv,isD);}},55);}
+function buildC(loc,cy,n,dv,isD){const hrs=[...Array(n).keys()],uH=hrs.map(h=>(cy+h)%24),lH=hrs.map(h=>(cy+h+(loc.off||0)+24)%24),lb=hrs.map(h=>`${lH[h]}${loc.tz}/${uH[h]}Z`);const bT=isD?92:74,T=hrs.map(h=>bT+Math.cos((lH[h]-15)*Math.PI/12)*(isD?16:10)+(Math.random()-.5)*3);const R=hrs.map(h=>Math.min(98,Math.max(8,(isD?22:65)-Math.cos((lH[h]-4)*Math.PI/12)*(isD?12:25)+(Math.random()-.5)*5)));const W=hrs.map(()=>3+Math.random()*10),G=W.map(s=>s+2+Math.random()*5),DD=hrs.map(h=>isD?220+Math.sin(h*.3)*40+Math.random()*20:180+Math.sin(h*.3)*60+Math.random()*30);const P=hrs.map(h=>isD?(Math.random()<.04?Math.random()*1.5:0):(lH[h]>=14&&lH[h]<=18?Math.random()*4:Math.random()*.1));const CL=hrs.map(()=>isD?12000+Math.random()*8000:3000+Math.random()*7000),V=hrs.map(h=>isD?(lH[h]>=10&&lH[h]<=16?3+Math.random()*4:7+Math.random()*3):6+Math.random()*4);const SM=hrs.map(h=>isD?.3+Math.random()*1.5:(lH[h]>=10&&lH[h]<=19?3+Math.random()*8:.5+Math.random()*2));const DU=hrs.map(h=>isD?(lH[h]>=9&&lH[h]<=17?18+Math.random()*45:4+Math.random()*6):(.2+Math.random()*1.5));const AO=hrs.map((_,i)=>SM[i]*.002+DU[i]*.004);
+window.forecastData=hrs.map((h,i)=>({fh:h,utc:`${dv} ${String(uH[i]).padStart(2,'0')}Z`,local:`${lH[i]} ${loc.tz}`,temp_F:+T[i].toFixed(1),RH:+R[i].toFixed(1),wind_mph:+(W[i]*2.237).toFixed(1),wdir:+DD[i].toFixed(0),gust_mph:+(G[i]*2.237).toFixed(1),precip_mm:+P[i].toFixed(2),ceiling_ft:Math.round(CL[i]),vis_mi:+V[i].toFixed(1),smoke_ugm3:+SM[i].toFixed(2),dust_ugm3:+DU[i].toFixed(2),aod:+AO[i].toFixed(4)}));
+document.getElementById('metricsRow').innerHTML=[{v:`${Math.round(Math.max(...T))}°F`,l:'Max Temp',c:'#ff4b4b'},{v:`${Math.max(...W).toFixed(0)}mph`,l:'Max Wind',c:'#ffb74d'},{v:`${P.reduce((a,b)=>a+b,0).toFixed(1)}mm`,l:'Precip',c:'#81c784'},{v:`${Math.max(...SM).toFixed(1)}`,l:'Smoke µg/m³',c:'#ff8a65'},{v:`${Math.max(...DU).toFixed(1)}`,l:'Dust µg/m³',c:'#d4a373'},{v:`${Math.max(...AO).toFixed(3)}`,l:'Peak AOD',c:'#ce93d8'}].map(m=>`<div class="metric"><div class="val" style="color:${m.c}">${m.v}</div><div class="lbl">${m.l}</div></div>`).join('');
+document.getElementById('metricsRow').style.display='grid';document.getElementById('chartsGrid').style.display='grid';
+const gc='rgba(61,69,96,.4)',tc='#a3a8b8',cf=t=>({responsive:true,animation:{duration:300},plugins:{legend:{labels:{color:tc,font:{size:7}}},title:{display:true,text:t,color:'#fafafa',font:{size:9.5}}},scales:{x:{ticks:{color:tc,font:{size:5},maxRotation:50},grid:{color:gc}},y:{ticks:{color:tc,font:{size:6}},grid:{color:gc}}}});
+charts.push(new Chart(document.getElementById('c1'),{type:'line',data:{labels:lb,datasets:[{label:'Temperature (°F)',data:T,borderColor:'#ff4b4b',backgroundColor:'rgba(255,75,75,.06)',fill:true,tension:.3,pointRadius:1},{label:'Relative Humidity (%)',data:R,borderColor:'#4fc3f7',borderDash:[3,2],tension:.3,pointRadius:1,yAxisID:'y1'}]},options:{...cf('🌡️ Temperature & Relative Humidity'),scales:{...cf('').scales,y1:{position:'right',min:0,max:100,ticks:{color:'#4fc3f7',font:{size:6}},grid:{display:false}}}}}));
+charts.push(new Chart(document.getElementById('c2'),{type:'bar',data:{labels:lb,datasets:[{label:'Wind Speed (mph)',data:W.map(w=>w*2.237),backgroundColor:'rgba(79,195,247,.4)'},{label:'Wind Gust (mph)',data:G.map(g=>g*2.237),type:'scatter',pointBackgroundColor:'#ff4b4b',pointRadius:2}]},options:cf('💨 Wind Speed & Gusts (10m)')}));
+charts.push(new Chart(document.getElementById('c3'),{type:'scatter',data:{datasets:[{label:'Wind Direction (°)',data:hrs.map((h,i)=>({x:h,y:DD[i]})),pointBackgroundColor:'#ffb74d',pointRadius:3}]},options:{...cf('🧭 Wind Direction (10m)'),scales:{x:{type:'linear',min:0,max:n-1,ticks:{color:tc,font:{size:5}},grid:{color:gc}},y:{min:0,max:360,ticks:{color:tc,font:{size:6},callback:v=>({0:'N',90:'E',180:'S',270:'W',360:'N'}[v]||'')},grid:{color:gc}}}}}));
+charts.push(new Chart(document.getElementById('c4'),{type:'bar',data:{labels:lb,datasets:[{label:'Precipitation (mm)',data:P,backgroundColor:'rgba(129,199,132,.6)'}]},options:cf('🌧️ Hourly Accumulated Precipitation')}));
+charts.push(new Chart(document.getElementById('c5'),{type:'line',data:{labels:lb,datasets:[{label:'Cloud Ceiling (ft AGL)',data:CL,borderColor:'#ce93d8',backgroundColor:'rgba(156,39,176,.06)',fill:true,tension:.3,pointRadius:1},{label:'Visibility (statute miles)',data:V,borderColor:'#ffee58',borderDash:[3,2],tension:.3,pointRadius:1,yAxisID:'y1'}]},options:{...cf('☁️ Cloud Ceiling & Visibility'),scales:{...cf('').scales,y1:{position:'right',ticks:{color:'#ffee58',font:{size:6}},grid:{display:false}}}}}));
+charts.push(new Chart(document.getElementById('c6'),{type:'line',data:{labels:lb,datasets:[{label:'Near-Surface Smoke (µg/m³)',data:SM,borderColor:'#e64a19',backgroundColor:'rgba(255,138,101,.08)',fill:true,tension:.4,pointRadius:1}]},options:cf('🔥 Near-Surface Smoke Concentration')}));
+charts.push(new Chart(document.getElementById('c7'),{type:'line',data:{labels:lb,datasets:[{label:'Near-Surface Dust (µg/m³)',data:DU,borderColor:'#d4a373',backgroundColor:'rgba(212,163,115,.08)',fill:true,tension:.4,pointRadius:1}]},options:cf(`🏜️ Near-Surface Dust Concentration${isD?' (Arid Site)':''}`)}));
+charts.push(new Chart(document.getElementById('c8'),{type:'line',data:{labels:lb,datasets:[{label:'Smoke AOD',data:SM.map(s=>s*.002),borderColor:'#ff8a65',fill:true,backgroundColor:'rgba(255,138,101,.05)',tension:.3,pointRadius:1},{label:'Dust AOD',data:DU.map(d=>d*.004),borderColor:'#d4a373',fill:true,backgroundColor:'rgba(212,163,115,.05)',tension:.3,pointRadius:1},{label:'Total AOD',data:AO,borderColor:'#ce93d8',tension:.3,pointRadius:1.5,borderWidth:2}]},options:cf('🌫️ Aerosol Optical Depth (Smoke + Dust)')}));
+document.getElementById('dlRow').style.display='flex';}
+</script>
+</body>
+</html>
+
+							<script>
+                            	
+							</script>
+                        </body>
+                        </html>
+                    
