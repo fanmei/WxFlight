@@ -1,11 +1,10 @@
-Option A: Open Locally (Simplest)
-Save WxFlight_Planner.html to your computer;
+Using setup_wxflight.py to setup the code in your repository
 
-Double-click to open in any modern browser (Chrome, Edge, Firefox);
+Command to run the code:
+python -m streamlit run wxflight_app.py
 
-Start using immediately — no installation needed
-
-
-Option B: Access via Hosted URL (Full Features)
-
-If a hosted version is available, simply open the shared URL in your browser. All features including live Aviation API data will work.
+You can now view your Streamlit app in your browser.
+For example:
+  Local URL: http://localhost:8501
+  Network URL: http://192.168.1.14:8501
+  External URL: http://50.37.90.103:8501
