@@ -1,0 +1,9 @@
+herbie-data
+xarray
+cfgrib
+pandas
+numpy
+matplotlib
+pytz
+streamlit
+requests

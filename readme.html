@@ -1,0 +1,371 @@
+
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+							<style>
+								body {
+									background-color: white; /* Ensure the iframe has a white background */
+								}
+
+								
+							</style>
+                        </head>
+                        <body>
+                            <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WxFlight Planner – README</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d1117;--surface:#161b22;--text:#e6edf3;--text-dim:#8b949e;--border:#30363d;--accent:#58a6ff;--accent2:#7c4dff;--green:#3fb950;--orange:#d29922;--font-mono:'JetBrains Mono',monospace;--font-serif:'Source Serif 4',Georgia,serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font-serif);background:var(--bg);color:var(--text);line-height:1.8;padding:20px}
+.container{max-width:860px;margin:0 auto}
+h1{font-size:2rem;color:var(--accent2);margin-bottom:5px;border-bottom:2px solid var(--border);padding-bottom:10px}
+h1 .emoji{font-size:1.8rem}
+h2{font-size:1.4rem;color:var(--accent);margin:30px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+h3{font-size:1.1rem;color:var(--green);margin:20px 0 8px}
+h4{font-size:0.95rem;color:var(--orange);margin:15px 0 6px}
+p{margin:8px 0;font-size:0.95rem;color:var(--text)}
+ul,ol{margin:8px 0 8px 24px}
+li{margin:4px 0;font-size:0.92rem}
+code{background:#1c2128;padding:2px 6px;border-radius:4px;font-family:var(--font-mono);font-size:0.85rem;color:#79c0ff}
+pre{background:#1c2128;border:1px solid var(--border);border-radius:8px;padding:16px;overflow-x:auto;font-family:var(--font-mono);font-size:0.82rem;line-height:1.6;margin:12px 0;color:#c9d1d9}
+table{width:100%;border-collapse:collapse;margin:12px 0}
+th,td{border:1px solid var(--border);padding:8px 12px;text-align:left;font-size:0.88rem}
+th{background:#1c2128;color:var(--accent);font-family:var(--font-mono);font-size:0.8rem}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.badge{display:inline-block;padding:3px 10px;border-radius:12px;font-family:var(--font-mono);font-size:0.72rem;margin:3px 3px 3px 0}
+.badge-purple{background:rgba(124,77,255,.15);color:#b388ff;border:1px solid rgba(124,77,255,.3)}
+.badge-blue{background:rgba(88,166,255,.12);color:#58a6ff;border:1px solid rgba(88,166,255,.3)}
+.badge-green{background:rgba(63,185,80,.12);color:#3fb950;border:1px solid rgba(63,185,80,.3)}
+.badge-orange{background:rgba(210,153,34,.12);color:#d29922;border:1px solid rgba(210,153,34,.3)}
+.note{background:rgba(88,166,255,.08);border-left:4px solid var(--accent);padding:12px 16px;border-radius:0 6px 6px 0;margin:12px 0;font-size:0.88rem}
+.warning{background:rgba(210,153,34,.08);border-left:4px solid var(--orange);padding:12px 16px;border-radius:0 6px 6px 0;margin:12px 0;font-size:0.88rem;color:var(--orange)}
+.success{background:rgba(63,185,80,.08);border-left:4px solid var(--green);padding:12px 16px;border-radius:0 6px 6px 0;margin:12px 0;font-size:0.88rem;color:var(--green)}
+.copy-btn{position:relative;float:right;background:var(--accent);color:#0d1117;border:none;padding:4px 10px;border-radius:4px;font-size:0.7rem;font-family:var(--font-mono);cursor:pointer}
+.copy-btn:hover{opacity:.8}
+hr{border:none;border-top:1px solid var(--border);margin:30px 0}
+.feature-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+.feature-card{background:#1c2128;border:1px solid var(--border);border-radius:8px;padding:14px}
+.feature-card h4{margin:0 0 6px;color:var(--text)}
+.feature-card p{font-size:0.82rem;color:var(--text-dim);margin:0}
+@media(max-width:600px){.feature-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1><span class="emoji">✈️</span> WxFlight Planner</h1>
+<p style="font-size:1.1rem;color:var(--text-dim);margin-bottom:15px">Weather & Flight Mission Planning System</p>
+
+<span class="badge badge-purple">Version 1.0</span>
+<span class="badge badge-blue">Single HTML File</span>
+<span class="badge badge-green">No Installation Required</span>
+<span class="badge badge-orange">Works Offline (HRRR tab)</span>
+
+<hr>
+
+<h2>📋 Overview</h2>
+<p>WxFlight Planner is a self-contained, browser-based weather planning tool designed for field campaign mission planning. It combines three key capabilities in a single HTML file:</p>
+
+<div class="feature-grid">
+<div class="feature-card"><h4>🌤️ HRRR Forecast</h4><p>24-hour point forecasts with temperature, humidity, wind, precipitation, cloud ceiling, visibility, smoke, dust, and aerosol optical depth.</p></div>
+<div class="feature-card"><h4>✈️ Aviation Weather</h4><p>Live METAR and TAF data from aviationweather.gov API with decoded fields and flight category.</p></div>
+<div class="feature-card"><h4>🌀 Tropical Tidbits</h4><p>Direct links to HRRR model maps with configurable region, variable, runtime, and forecast hour.</p></div>
+<div class="feature-card"><h4>📥 Data Export</h4><p>Download forecast data as CSV, JSON, or a composite PNG image of all charts.</p></div>
+</div>
+
+<hr>
+
+<h2>🚀 Quick Start</h2>
+
+<h3>Option A: Open Locally (Simplest)</h3>
+<ol>
+<li>Save <code>WxFlight_Planner.html</code> to your computer</li>
+<li>Double-click to open in any modern browser (Chrome, Edge, Firefox)</li>
+<li>Start using immediately — no installation needed</li>
+</ol>
+
+<h3>Option B: Access via Hosted URL (Full Features)</h3>
+<p>If a hosted version is available, simply open the shared URL in your browser. All features including live Aviation API data will work.</p>
+
+<div class="note">
+<strong>💡 Tip:</strong> For the best experience with all features working (including live METAR/TAF), use a hosted version rather than opening locally. See the "Hosting" section below.
+</div>
+
+<hr>
+
+<h2>📖 User Guide</h2>
+
+<h3>Tab 1: 🌤️ HRRR Forecast</h3>
+<ol>
+<li><strong>Select a location:</strong>
+<ul>
+<li>🌲 DOE Bankhead National Forest (Alabama)</li>
+<li>🏜️ DustieAim – Phoenix, AZ</li>
+<li>📌 Custom (enter your own lat/lon)</li>
+</ul>
+</li>
+<li><strong>Set parameters:</strong>
+<ul>
+<li>Run Date (UTC)</li>
+<li>Model Cycle (00Z, 06Z, 12Z, or 18Z)</li>
+<li>Forecast Hours (1–48)</li>
+</ul>
+</li>
+<li><strong>Click "🚀 Run HRRR Forecast"</strong></li>
+<li><strong>View results:</strong> Summary metrics + 8 forecast charts</li>
+<li><strong>Download:</strong> Click CSV, JSON, or PNG buttons</li>
+</ol>
+
+<h4>Charts Produced:</h4>
+<table>
+<tr><th>#</th><th>Chart</th><th>Variables</th></tr>
+<tr><td>1</td><td>Temperature & Relative Humidity</td><td>°F (left axis), % (right axis)</td></tr>
+<tr><td>2</td><td>Wind Speed & Gusts</td><td>mph, with gust markers</td></tr>
+<tr><td>3</td><td>Wind Direction</td><td>Degrees (N/E/S/W), meteorological convention</td></tr>
+<tr><td>4</td><td>Precipitation</td><td>Hourly accumulated, mm</td></tr>
+<tr><td>5</td><td>Cloud Ceiling & Visibility</td><td>ft AGL (left), statute miles (right)</td></tr>
+<tr><td>6</td><td>Smoke Concentration</td><td>Near-surface, µg/m³</td></tr>
+<tr><td>7</td><td>Dust Concentration</td><td>Near-surface, µg/m³</td></tr>
+<tr><td>8</td><td>Aerosol Optical Depth</td><td>Smoke AOD + Dust AOD + Total</td></tr>
+</table>
+
+<h3>Tab 2: ✈️ Aviation Weather</h3>
+<ol>
+<li><strong>Select or type a station ID</strong> (4-letter ICAO code)</li>
+<li><strong>Choose data type:</strong> METAR+TAF, METAR only, or TAF only</li>
+<li><strong>Set hours back</strong> for METAR history (1–12h)</li>
+<li><strong>Click "✈️ Get Aviation Weather"</strong></li>
+<li>View decoded METAR observation and TAF forecast periods</li>
+</ol>
+
+<h4>Pre-configured Stations:</h4>
+<table>
+<tr><th>ID</th><th>Airport</th><th>Location</th></tr>
+<tr><td>KJFX</td><td>Jasper / Walker County</td><td>Near Bankhead NF, AL</td></tr>
+<tr><td>KBHM</td><td>Birmingham-Shuttlesworth Intl</td><td>Birmingham, AL</td></tr>
+<tr><td>KHSV</td><td>Huntsville International</td><td>Huntsville, AL</td></tr>
+<tr><td>KPHX</td><td>Phoenix Sky Harbor Intl</td><td>Phoenix, AZ</td></tr>
+<tr><td>KDVT</td><td>Deer Valley Airport</td><td>Phoenix, AZ</td></tr>
+</table>
+
+<div class="warning">
+<strong>⚠️ Note:</strong> The Aviation API fetch may be blocked by CORS when running the file locally (from <code>file://</code>). If this happens, the app shows a direct link to view the data on aviationweather.gov. Hosting the file on any web server resolves this.
+</div>
+
+<h3>Tab 3: 🌀 Tropical Tidbits</h3>
+<ol>
+<li><strong>Set Runtime:</strong> Date and hour (UTC) of the HRRR model run</li>
+<li><strong>Select Region:</strong> SE US, SW US, CONUS, etc.</li>
+<li><strong>Select Variable:</strong> Reflectivity, Temperature, Wind, Smoke, Dust, AOD, etc.</li>
+<li><strong>Select Forecast Hour:</strong> f00–f48</li>
+<li><strong>Click the orange link</strong> to open the map on Tropical Tidbits in a new tab</li>
+<li>Use ◀▶ buttons to step through hours, or "Animate" to auto-play</li>
+</ol>
+
+<h4>Available Variables:</h4>
+<table>
+<tr><th>Package Code</th><th>Description</th></tr>
+<tr><td><code>ref_frzn</code></td><td>Simulated Reflectivity</td></tr>
+<tr><td><code>mslp_pcpn</code></td><td>MSLP & Precipitation</td></tr>
+<tr><td><code>T2m</code></td><td>2m Temperature</td></tr>
+<tr><td><code>Td2m</code></td><td>2m Dewpoint</td></tr>
+<tr><td><code>10mwind</code></td><td>10m Wind Speed</td></tr>
+<tr><td><code>sfcwind_gust</code></td><td>Surface Gusts</td></tr>
+<tr><td><code>precip_ptotal</code></td><td>Total Precipitation</td></tr>
+<tr><td><code>cape</code></td><td>CAPE</td></tr>
+<tr><td><code>vis</code></td><td>Visibility</td></tr>
+<tr><td><code>cig</code></td><td>Cloud Ceiling</td></tr>
+<tr><td><code>smoke</code></td><td>Smoke</td></tr>
+<tr><td><code>dust</code></td><td>Dust</td></tr>
+<tr><td><code>aod</code></td><td>Aerosol Optical Depth</td></tr>
+<tr><td><code>z500_mslp</code></td><td>500mb Heights + MSLP</td></tr>
+<tr><td><code>T850</code></td><td>850mb Temperature</td></tr>
+<tr><td><code>pwat</code></td><td>Precipitable Water</td></tr>
+</table>
+
+<h4>Region Codes:</h4>
+<table>
+<tr><th>Code</th><th>Region</th><th>Use For</th></tr>
+<tr><td><code>seus</code></td><td>Southeast US</td><td>Bankhead NF, Alabama</td></tr>
+<tr><td><code>swus</code></td><td>Southwest US</td><td>DustieAim, Phoenix AZ</td></tr>
+<tr><td><code>us</code></td><td>Full CONUS</td><td>Overview</td></tr>
+<tr><td><code>midsouth</code></td><td>Mid-South</td><td>TN/MS/AR region</td></tr>
+<tr><td><code>gulf</code></td><td>Gulf Coast</td><td>Gulf states</td></tr>
+<tr><td><code>soupl</code></td><td>Southern Plains</td><td>TX/OK</td></tr>
+<tr><td><code>cpl</code></td><td>Central Plains</td><td>KS/NE</td></tr>
+<tr><td><code>ne</code></td><td>Northeast</td><td>New England</td></tr>
+<tr><td><code>nw</code></td><td>Northwest</td><td>Pacific NW</td></tr>
+<tr><td><code>mw</code></td><td>Midwest</td><td>Great Lakes</td></tr>
+</table>
+
+<hr>
+
+<h2>🌐 Hosting (For Full Functionality)</h2>
+
+<h3>GitHub Pages (Free, Recommended)</h3>
+<pre>
+# 1. Create a GitHub repository
+# 2. Upload WxFlight_Planner.html as index.html
+# 3. Enable Pages: Settings → Pages → Source: main → Save
+# 4. Access at: https://YOUR-USERNAME.github.io/REPO-NAME/
+</pre>
+
+<h3>Netlify Drop (30 seconds, no account needed)</h3>
+<ol>
+<li>Go to <a href="https://app.netlify.com/drop" target="_blank">app.netlify.com/drop</a></li>
+<li>Create a folder with your HTML file renamed to <code>index.html</code></li>
+<li>Drag and drop the folder onto the page</li>
+<li>Get your URL instantly</li>
+</ol>
+
+<h3>Python Local Server (For testing)</h3>
+<pre>
+# Navigate to the folder containing the HTML file
+cd /path/to/wxflight/
+
+# Start a simple HTTP server
+python -m http.server 8080
+
+# Open in browser: http://localhost:8080/WxFlight_Planner.html
+</pre>
+
+<hr>
+
+<h2>⚙️ Technical Details</h2>
+
+<h3>Architecture</h3>
+<ul>
+<li><strong>Single file:</strong> Everything (HTML, CSS, JavaScript) in one <code>.html</code> file</li>
+<li><strong>No build step:</strong> No npm, webpack, or compilation needed</li>
+<li><strong>No backend:</strong> Runs entirely in the browser</li>
+<li><strong>External dependencies:</strong> Chart.js (loaded from CDN), Google Fonts (optional)</li>
+</ul>
+
+<h3>Data Sources</h3>
+<table>
+<tr><th>Feature</th><th>Source</th><th>Type</th></tr>
+<tr><td>HRRR Forecast</td><td>Simulated (client-side)</td><td>Demo data</td></tr>
+<tr><td>Aviation METAR/TAF</td><td>aviationweather.gov/api/data/</td><td>Live API</td></tr>
+<tr><td>Tropical Tidbits</td><td>tropicaltidbits.com</td><td>External links</td></tr>
+</table>
+
+<div class="note">
+<strong>📝 Note on HRRR data:</strong> The current version generates realistic simulated data for demonstration. To connect to real HRRR data, use the companion Python script (<code>hrrr_bankhead_v2.py</code>) which fetches actual NOAA HRRR model output via the Herbie library.
+</div>
+
+<h3>Browser Compatibility</h3>
+<table>
+<tr><th>Browser</th><th>Status</th></tr>
+<tr><td>Chrome 90+</td><td>✅ Full support</td></tr>
+<tr><td>Edge 90+</td><td>✅ Full support</td></tr>
+<tr><td>Firefox 88+</td><td>✅ Full support</td></tr>
+<tr><td>Safari 14+</td><td>✅ Full support</td></tr>
+<tr><td>Mobile browsers</td><td>✅ Responsive layout</td></tr>
+</table>
+
+<hr>
+
+<h2>📂 Project Files</h2>
+<pre>
+wxflight-planner/
+├── index.html              ← The app (rename WxFlight_Planner.html)
+├── README.md               ← This documentation
+├── hrrr_bankhead_v2.py     ← Python script for real HRRR data (optional)
+├── hrrr_bankhead_app.py    ← Streamlit wrapper (optional)
+└── environment.yml         ← Conda environment for Python tools (optional)
+</pre>
+
+<hr>
+
+<h2>🎯 Field Campaign Sites</h2>
+
+<h3>DOE Bankhead National Forest</h3>
+<table>
+<tr><td>Coordinates</td><td>34° 20′ 32.9″ N, 87° 20′ 17.4″ W</td></tr>
+<tr><td>Decimal</td><td>34.3425°N, 87.3382°W</td></tr>
+<tr><td>Altitude</td><td>293 meters</td></tr>
+<tr><td>State</td><td>Alabama</td></tr>
+<tr><td>Timezone</td><td>America/Chicago (CDT, UTC-5)</td></tr>
+<tr><td>Nearest airports</td><td>KJFX, KBHM, KHSV</td></tr>
+<tr><td>TT Region</td><td><code>seus</code></td></tr>
+</table>
+
+<h3>DustieAim – Phoenix, AZ</h3>
+<table>
+<tr><td>Coordinates</td><td>33° 36′ 25.2″ N, 112° 10′ 0.9″ W</td></tr>
+<tr><td>Decimal</td><td>33.6070°N, 112.1669°W</td></tr>
+<tr><td>Altitude</td><td>~331 meters</td></tr>
+<tr><td>State</td><td>Arizona</td></tr>
+<tr><td>Timezone</td><td>America/Phoenix (MST, UTC-7, no DST)</td></tr>
+<tr><td>Nearest airports</td><td>KPHX, KDVT, KIWA</td></tr>
+<tr><td>TT Region</td><td><code>swus</code></td></tr>
+</table>
+
+<hr>
+
+<h2>🔧 Troubleshooting</h2>
+
+<h3>Charts don't appear</h3>
+<ul>
+<li>Ensure you have internet access (Chart.js loads from CDN on first use)</li>
+<li>Try a different browser (Chrome recommended)</li>
+<li>Check browser console (F12) for errors</li>
+</ul>
+
+<h3>Aviation data shows CORS error</h3>
+<ul>
+<li>This happens when opening the file directly (<code>file://</code> protocol)</li>
+<li><strong>Solution:</strong> Host the file on any web server, or use the provided link to open aviationweather.gov directly</li>
+</ul>
+
+<h3>Tropical Tidbits link doesn't open</h3>
+<ul>
+<li>Ensure the runtime date/hour is recent (within the last 24 hours)</li>
+<li>HRRR data is typically available ~2 hours after the model run time</li>
+<li>Try right-click → "Open in new tab" if left-click is blocked by the embedding environment</li>
+</ul>
+
+<h3>Download buttons don't work</h3>
+<ul>
+<li>Run the HRRR forecast first (data must be generated before export)</li>
+<li>Some embedded environments (iframes) may block downloads — try opening the HTML file directly in a browser tab</li>
+</ul>
+
+<hr>
+
+<h2>📄 License & Credits</h2>
+<ul>
+<li><strong>Weather Data:</strong> NOAA HRRR via <a href="https://rapidrefresh.noaa.gov/hrrr/" target="_blank">NOAA Rapid Refresh</a></li>
+<li><strong>Aviation Data:</strong> <a href="https://aviationweather.gov/data/api/" target="_blank">FAA/NWS Aviation Weather Center API</a></li>
+<li><strong>Model Maps:</strong> <a href="https://www.tropicaltidbits.com/" target="_blank">Tropical Tidbits</a> (Levi Cowan)</li>
+<li><strong>Charts:</strong> <a href="https://www.chartjs.org/" target="_blank">Chart.js</a> (MIT License)</li>
+<li><strong>Fonts:</strong> Google Fonts (JetBrains Mono, Source Serif 4)</li>
+</ul>
+
+<hr>
+
+<h2>📬 Contact</h2>
+<p>For questions, issues, or feature requests, contact the developer or open an issue on the project repository.</p>
+
+<div class="success">
+<strong>🎉 Enjoy using WxFlight Planner!</strong> This tool was designed to make weather-aware mission planning accessible to everyone — no coding required.
+</div>
+
+</div>
+</body>
+</html>
+
+							<script>
+                            	
+							</script>
+                        </body>
+                        </html>
+                    

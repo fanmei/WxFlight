@@ -1,0 +1,17 @@
+name: wxflight
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - eccodes
+  - cfgrib
+  - xarray
+  - pandas
+  - numpy
+  - matplotlib
+  - pytz
+  - pip:
+    - herbie-data
+    - streamlit
+    - requests
