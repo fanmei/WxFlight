@@ -33,7 +33,69 @@ st.set_page_config(
 )
 
 st.title(f"✈️ {APP_NAME}")
-st.caption(f"Weather & Flight Mission Planning | v{__version__}")
+st.caption(f"Weather Forecast & Flight Mission Planning | v{__version__}")
+
+st.markdown(
+    """
+    <style>
+    /* Entire tabs wrapper */
+    div[data-testid="stTabs"] {
+        background-color: #0e1117;
+    }
+
+    /* Tab buttons */
+    div[data-testid="stTabs"] button[data-baseweb="tab"] {
+        background-color: #1a1d24;
+        color: #dce3ea;
+        padding: 14px 26px;
+        border-radius: 10px 10px 0 0;
+        margin-right: 6px;
+        border: 1px solid #2f3642;
+    }
+
+    /* Tab label text */
+    div[data-testid="stTabs"] button[data-baseweb="tab"] p {
+        font-size: 20px;
+        font-weight: 700;
+        color: #dce3ea;
+    }
+
+    /* Hover effect */
+    div[data-testid="stTabs"] button[data-baseweb="tab"]:hover {
+        background-color: #252b36;
+        color: #ffffff;
+    }
+
+    /* Active/selected tab */
+    div[data-testid="stTabs"] button[aria-selected="true"] {
+        background-color: #12395c;
+        border-bottom: 4px solid #3aa0ff;
+    }
+
+    div[data-testid="stTabs"] button[aria-selected="true"] p {
+        color: #ffffff;
+    }
+
+    /* Tab content panel */
+    div[data-testid="stTabs"] div[data-baseweb="tab-panel"] {
+        min-height: 650px;
+        padding: 24px;
+        background-color: #151922;
+        border: 1px solid #2f3642;
+        border-radius: 0 0 14px 14px;
+        color: #e6edf3;
+    }
+
+    /* Optional: make headings inside tabs brighter */
+    div[data-testid="stTabs"] div[data-baseweb="tab-panel"] h1,
+    div[data-testid="stTabs"] div[data-baseweb="tab-panel"] h2,
+    div[data-testid="stTabs"] div[data-baseweb="tab-panel"] h3 {
+        color: #ffffff;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 tab_hrrr, tab_avx, tab_tt = st.tabs([
     "🌤️ HRRR Forecast",
@@ -41,6 +103,17 @@ tab_hrrr, tab_avx, tab_tt = st.tabs([
     "🌀 Tropical Tidbits"
 ])
 
+with tab_hrrr:
+    st.subheader("HRRR Forecast")
+    st.write("Your HRRR forecast content goes here.")
+
+with tab_avx:
+    st.subheader("Aviation Weather")
+    st.write("Your aviation weather content goes here.")
+
+with tab_tt:
+    st.subheader("Tropical Tidbits")
+    st.write("Your tropical content goes here.")
 # ============================================================
 # TAB 1: HRRR FORECAST
 # ============================================================
